@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/stylesheet.css') }}"
+    />
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+    <script src="{{url_for('static', filename='javascript/files.js')}}"></script>
+  </head>
+  <body>
+    <div class="load"></div>
+    <div class="card" style="width: 25rem">
+      <form action="/result" method="POST" enctype="multipart/form-data">
+        <label for="formFile" class="form-label"><h4>File</h4></label>
+        <input class="form-control" id="formFile" type="file" name="file" />
+        <button
+          class="btn btn-primary btn-lg active submit"
+          type="submit"
+          onclick="loading();"
+        >
+          Upload
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+body {
+  background: #c8d8e4 !important;
+}
+.card {
+  margin: 20px;
+  padding: 15px;
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+  position: relative;
+}
+
+.submit {
+  margin-top: 12px;
+  padding: 4px 16px !important;
+}
