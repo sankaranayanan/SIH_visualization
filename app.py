@@ -1,3 +1,4 @@
+import json
 import statsmodels.api as sm
 import itertools
 import numpy as np
@@ -22,19 +23,26 @@ def upload_file():
         if request.files['file'].filename == '':
             f.seek(0, os.SEEK_END)
             if f.tell() == 0:
-                return '<h4>No selected file</h4>'
+                return render_template('file_not_selected.html')
         else:
             f.save(f.filename)
             if(check_file_extension(f.filename)):
                 model(f.filename)
-                return render_template('result.html')
+                graphjson = graph()
+                return render_template('result.html',graphjson=graphjson)
             else:
-                return "<h4>Oops! Wrong file input.Please input a csv file as input.</h4>"
+                return render_template('csv_only.html')
 
 @app.route('/download')
 def download():
     path = "Forecast(2022-26).csv"
     return send_file(path,as_attachment=True)
+
+def graph():
+    df = pd.read_csv('Forecast(2022-26).csv')
+    fig = px.line(df, x='Date', y='Mean',markers=True)
+    graphJson = json.dumps(fig,cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJson
 
 def check_file_extension(filename):
     return filename.split('.')[-1] in allowed_extensions
@@ -66,22 +74,24 @@ def model(file_path):
     result = model.fit(disp=0)
     prediction = result.get_prediction(start = pd.to_datetime('2019-01-01'), dynamic = False)
     prediction_ci = prediction.conf_int()
+    Date = prediction_ci.index
 
     y_hat = prediction.predicted_mean
     y_truth = y['2019-01-01':]
-
     mse = ((y_hat - y_truth) ** 2).median()
     rmse = np.sqrt(mse)
 
     pred_uc = result.get_forecast(steps = 50)
+    print(pred_uc)
     pred_ci = pred_uc.conf_int()
 
     cols=['lower Spot_price','upper Spot_price']
     values=pred_ci[cols].mean()
     pred_ci.insert(2,"Mean",values)
     pred_ci['Mean'] = pred_ci[['lower Spot_price', 'upper Spot_price']].mean(axis=1)
+    pred_ci.reset_index(inplace=True)
+    pred_ci.rename(columns = {'index':'Date'}, inplace = True)
     pred_ci.to_csv('Forecast(2022-26).csv')
-
 
 if __name__ == '__main__':
    app.run(debug = True)

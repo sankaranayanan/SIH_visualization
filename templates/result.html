@@ -17,14 +17,22 @@
     </head>
   </head>
   <body>
-    <div class="card" style="width: 20rem;">
-    <h4>Click the button to download the time series forecast</h4>
-    <a
-      class="btn btn-primary btn-lg active"
-      role="button"
-      aria-pressed="true"
-      href="{{url_for('download')}}"
-      >Download</a
-    >
+    <div class="card" style="width: 20rem">
+      <h4>Click the button to download the time series forecast</h4>
+      <a
+        class="btn btn-primary btn-lg active"
+        role="button"
+        aria-pressed="true"
+        href="{{url_for('download')}}"
+        >Download</a
+      >
+    </div>
+    <div id="ch"></div>
   </body>
 </html>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+  var graphs1 = {{ graphjson | safe}};
+  Plotly.plot("ch", graphs1,{});
+</script>
