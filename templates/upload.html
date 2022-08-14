@@ -1,32 +1,81 @@
 <!DOCTYPE html>
 <html>
+  <title>File upload</title>
   <head>
+    <!-- Linking stylesheet.css from static folder -->
+
     <link
       rel="stylesheet"
       type="text/css"
       href="{{ url_for('static',filename='styles/stylesheet.css') }}"
     />
+    <!-- Importing bootstrap Content Delivery Network -->
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
       crossorigin="anonymous"
     />
-    <script src="{{url_for('static', filename='javascript/files.js')}}"></script>
   </head>
   <body>
-    <div class="card" style="width: 25rem">
-      <form action="/result" method="POST" enctype="multipart/form-data">
-        <label for="formFile" class="form-label"><h4>File</h4></label>
-        <input class="form-control" id="formFile" type="file" name="file" />
-        <button
-          class="btn btn-primary btn-lg active submit"
-          type="submit"
-          onclick="loading();"
-        >
-          Upload
-        </button>
-      </form>
+    <!-- Spinner with loading text -->
+
+    <!-- <h3 id="loading">
+      <div class="spinner-border text-primary" role="status"></div>
+      <div class="text-primary loadingMessage">Loading...</div>
+    </h3> -->
+
+    <!-- 3dot loading -->
+
+    <div id="loading" class="loader">
+      <span class="text-primary loader__element"></span>
+      <span class="text-primary loader__element"></span>
+      <span class="text-primary loader__element"></span>
+    </div>
+
+    <!-- form container -->
+
+    <div class="container" id="blur">
+      <div class="content row">
+        <div class="card" style="width: 25rem">
+          <form action="/result" method="POST" enctype="multipart/form-data">
+            <label for="formFile" class="form-label"><h4>File</h4></label>
+            <input class="form-control" id="formFile" type="file" name="file" />
+            <button
+              class="btn btn-primary btn-lg active submit"
+              type="submit"
+              onclick="toggle();"
+            >
+              Upload
+            </button>
+          </form>
+        </div>
+
+        <!-- Reference file download -->
+
+        <div class="card" style="width: 25rem">
+          <h4>Click the button to download the reference file</h4>
+          <a
+            class="btn btn-primary btn-lg active"
+            role="button"
+            aria-pressed="true"
+            href="{{url_for('file_format')}}"
+            >Download</a
+          >
+        </div>
+      </div>
     </div>
   </body>
 </html>
+
+<!-- Js for loading screen -->
+
+<script type="text/javascript">
+  function toggle() {
+    var loading = document.getElementById("loading");
+    loading.classList.toggle("active");
+    var blur = document.getElementById("blur");
+    blur.classList.toggle("active");
+  }
+</script>

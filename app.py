@@ -1,4 +1,6 @@
 import json
+from textwrap import fill
+from turtle import fillcolor
 import statsmodels.api as sm
 import itertools
 import numpy as np
@@ -19,17 +21,20 @@ def get_file():
 @app.route('/result', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
+        remove_old_files()
         f = request.files['file']
         if request.files['file'].filename == '':
             f.seek(0, os.SEEK_END)
             if f.tell() == 0:
                 return render_template('file_not_selected.html')
         else:
-            f.save(f.filename)
+            f.save("data"+f.filename)
             if(check_file_extension(f.filename)):
-                model(f.filename)
-                graphjson = graph()
-                return render_template('result.html',graphjson=graphjson)
+                os.rename('datafile_upload_ngpp.csv','dataset2.csv')
+                # model('dataset2.csv')
+                graphjson1 = predictedGraph()
+                graphjson2 = predictedRangeGraph()
+                return render_template('result.html',graphjson1=graphjson1,graphjson2=graphjson2)
             else:
                 return render_template('csv_only.html')
 
@@ -38,9 +43,39 @@ def download():
     path = "Forecast(2022-26).csv"
     return send_file(path,as_attachment=True)
 
-def graph():
-    df = pd.read_csv('Forecast(2022-26).csv')
-    fig = px.line(df, x='Date', y='Mean',markers=True)
+@app.route('/file_format')
+def file_format():
+    path = "files/file_upload.csv"
+    return send_file(path,as_attachment=True)
+
+def remove_old_files():
+    if os.path.exists("datafile_upload_ngpp.csv"):
+        os.remove("datafile_upload_ngpp.csv")
+    if os.path.exists("dataset2.csv"):
+        os.remove("dataset2.csv")
+def predictedGraph():
+    df = pd.read_csv('Forecast(2022-26).csv',index_col=[0])
+    fig = px.line(df, x='Date', y='Mean',title="Natural gas price from 2019-2026",markers=True,labels={"Date":"Year","Mean":"Price"})
+    fig.update_traces(line_color='#000000')
+    config = {
+         'showTips': False
+    }
+    # fig.update_xaxes(
+    #     dtick="M1",
+    #     tickformat="%b\n%Y",
+    #     ticklabelmode="period")
+    graphJson = json.dumps(fig,cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJson
+
+def predictedRangeGraph():
+    df = pd.read_csv('Forecast(2022-26).csv',index_col=[0])
+    fig = px.line(df, x='Date', y=df.columns.drop(labels=['Date']),title="Natural gas price range from 2019-2026",color_discrete_sequence=["yellow", "blue", "pink",])#,fill="tonexty"
+    
+    # fig.update_traces(fill='tonexty')
+    # fig.update_xaxes(
+    #     dtick="M1",
+    #     tickformat="%b\n%Y",
+    #     ticklabelmode="period")
     graphJson = json.dumps(fig,cls=plotly.utils.PlotlyJSONEncoder)
     return graphJson
 

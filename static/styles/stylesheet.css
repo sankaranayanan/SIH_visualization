@@ -1,14 +1,110 @@
+/* Common Styling */
+
 body {
   background: #c8d8e4 !important;
+  overflow-x: hidden;
 }
+
+/* Bootstrap */
+
 .card {
-  margin: 20px;
-  padding: 15px;
+  margin: 25px !important;
+  padding: 15px !important;
   box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
-  position: relative;
 }
+
+/* Upload Page */
 
 .submit {
   margin-top: 12px;
   padding: 4px 16px !important;
 }
+
+.container.active {
+  filter: blur(20px);
+}
+
+.loadingMessage {
+  display: inline-block !important;
+}
+
+:root {
+  --point-color: #0275d8;
+  --size: 7px;
+}
+
+.loader {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  z-index: 100000;
+}
+
+.loader__element {
+  border-radius: 100%;
+  border: var(--size) solid var(--point-color);
+  margin: calc(var(--size) * 2);
+}
+
+.loader__element:nth-child(1) {
+  animation: preloader 0.6s ease-in-out alternate infinite;
+}
+.loader__element:nth-child(2) {
+  animation: preloader 0.6s ease-in-out alternate 0.2s infinite;
+}
+
+.loader__element:nth-child(3) {
+  animation: preloader 0.6s ease-in-out alternate 0.4s infinite;
+}
+
+@keyframes preloader {
+  100% {
+    transform: scale(2);
+  }
+}
+
+#blur.container {
+  margin: 0px;
+  padding: 0px;
+}
+
+#loading {
+  font-family: var(--bs-body-font-family);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 50px;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+#loading.active {
+  top: 50%;
+  left: 50%;
+  visibility: visible;
+  opacity: 1;
+  transition: 0.5s;
+}
+
+/* Result Page */
+
+.downloadCard {
+  height: fit-content !important;
+}
+
+.displayChart {
+  height: max-content !important;
+}
+
+/* Error Pages */
+
+/* New addition */
