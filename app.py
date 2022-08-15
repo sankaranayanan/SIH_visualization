@@ -6,7 +6,6 @@ import itertools
 import numpy as np
 import pandas as pd
 import plotly
-import time
 import os
 import plotly.express as px
 from flask import Flask, render_template, request ,send_file,render_template
@@ -31,7 +30,7 @@ def upload_file():
             f.save("data"+f.filename)
             if(check_file_extension(f.filename)):
                 os.rename('datafile_upload_ngpp.csv','dataset2.csv')
-                # model('dataset2.csv')
+                model('dataset2.csv')
                 graphjson1 = predictedGraph()
                 graphjson2 = predictedRangeGraph()
                 return render_template('result.html',graphjson1=graphjson1,graphjson2=graphjson2)
@@ -56,10 +55,15 @@ def remove_old_files():
 def predictedGraph():
     df = pd.read_csv('Forecast(2022-26).csv',index_col=[0])
     fig = px.line(df, x='Date', y='Mean',title="Natural gas price from 2019-2026",markers=True,labels={"Date":"Year","Mean":"Price"})
-    fig.update_traces(line_color='#000000')
-    config = {
-         'showTips': False
-    }
+    fig.update_traces(line_color='green')
+    fig.update_layout({
+        'margin_b' : 30,
+        'margin_l' : 10,
+        'margin_r' : 10,
+        'paper_bgcolor': '#181b1d',
+        'font_color':'#FFFFFF',
+        'plot_bgcolor':'#FFFFFF'
+    })
     # fig.update_xaxes(
     #     dtick="M1",
     #     tickformat="%b\n%Y",
@@ -69,8 +73,15 @@ def predictedGraph():
 
 def predictedRangeGraph():
     df = pd.read_csv('Forecast(2022-26).csv',index_col=[0])
-    fig = px.line(df, x='Date', y=df.columns.drop(labels=['Date']),title="Natural gas price range from 2019-2026",color_discrete_sequence=["yellow", "blue", "pink",])#,fill="tonexty"
-    
+    fig = px.line(df, x='Date', y=df.columns.drop(labels=['Date']),title="Natural gas price range from 2019-2026",color_discrete_sequence=["green", "orange", "black",])#,fill="tonexty"
+    fig.update_layout({
+        'margin_b' : 30,
+        'margin_l' : 10,
+        'paper_bgcolor': '#181b1d',
+        'font_color':'#FFFFFF',
+        'plot_bgcolor':'#FFFFFF',
+        'height' : 400
+    })
     # fig.update_traces(fill='tonexty')
     # fig.update_xaxes(
     #     dtick="M1",

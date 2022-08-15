@@ -34,35 +34,39 @@
       <span class="text-primary loader__element"></span>
     </div>
 
-    <!-- form container -->
+    <!-- Bluring effect -->
 
-    <div class="container" id="blur">
-      <div class="content row">
+    <div class="container__userdef" id="blur">
+      <!-- Reference file download -->
+
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="card" style="width: 25rem">
+          <h4>Click the button to download the reference file</h4>
+          <a
+            class="btn btn-lg active"
+            role="button"
+            aria-pressed="true"
+            href="{{url_for('file_format')}}"
+            >Download</a
+          >
+        </div>
+      </div>
+
+      <!-- form container -->
+
+      <div class="content row d-flex align-items-center justify-content-center">
         <div class="card" style="width: 25rem">
           <form action="/result" method="POST" enctype="multipart/form-data">
             <label for="formFile" class="form-label"><h4>File</h4></label>
             <input class="form-control" id="formFile" type="file" name="file" />
             <button
-              class="btn btn-primary btn-lg active submit"
+              class="btn btn-lg active submit"
               type="submit"
               onclick="toggle();"
             >
               Upload
             </button>
           </form>
-        </div>
-
-        <!-- Reference file download -->
-
-        <div class="card" style="width: 25rem">
-          <h4>Click the button to download the reference file</h4>
-          <a
-            class="btn btn-primary btn-lg active"
-            role="button"
-            aria-pressed="true"
-            href="{{url_for('file_format')}}"
-            >Download</a
-          >
         </div>
       </div>
     </div>
